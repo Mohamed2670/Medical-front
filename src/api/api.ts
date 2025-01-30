@@ -2,11 +2,7 @@ import axios from 'axios';
 import { Drug, Insurance, PharmacySale, SalesAnalytics } from '../types';
 import { mockDrugs, mockInsurances, mockPharmacySales } from './mockData';
 
-// Test credentials:
-// Email: test@example.com
-// Password: Test123!
-
-const API_BASE_URL = 'https://api.example.com'; // Replace with actual API URL
+const API_BASE_URL = 'https://api.example.com';
 
 export const api = {
   login: async (email: string, password: string) => {
@@ -16,12 +12,30 @@ export const api = {
     throw new Error('Invalid credentials');
   },
 
+  searchDrugsSuggestions: async (query: string) => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    const results = mockDrugs.filter(drug => 
+      drug.name.toLowerCase().includes(query.toLowerCase()) ||
+      drug.className.toLowerCase().includes(query.toLowerCase()) ||
+      drug.ndc.some(code => code.includes(query))
+    );
+    return results;
+  },
+
   searchDrugs: async (query: string) => {
     const results = mockDrugs.filter(drug => 
       drug.name.toLowerCase().includes(query.toLowerCase()) ||
       drug.className.toLowerCase().includes(query.toLowerCase())
     );
     return results;
+  },
+
+  uploadDrugsExcel: async (file: File) => {
+    // In a real implementation, this would send the file to the server
+    // For now, we'll just return a success message
+    return { message: 'File uploaded successfully' };
   },
 
   getInsuranceForDrug: async (drugId: string) => {
